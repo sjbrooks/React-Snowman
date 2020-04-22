@@ -20,9 +20,14 @@ function Snowman({maxWrong, images, words}) {
     if guessed letters are {a,p,e}, show "app_e" for "apple"
   */
   function guessedWord() {
+    if (!gameIsOver) {
     return answer
       .split("")
       .map(ltr => (guessed.has(ltr) ? ltr : "_"));
+    } else {
+      return answer
+      .split("");
+    }
   }
 
   /** handleGuess: handle a guessed letter:
