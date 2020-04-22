@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {randomWord, ENGLISH_WORDS} from "./words";
 import "./Snowman.css";
 import img0 from "./0.png";
 import img1 from "./1.png";
@@ -24,7 +25,7 @@ function Snowman({maxWrong, images, words}) {
       .map(ltr => (guessed.has(ltr) ? ltr : "_"));
   }
 
-  /** handleGuest: handle a guessed letter:
+  /** handleGuess: handle a guessed letter:
       - add to guessed letters
       - if not in answer, increase number-wrong guesses
   */
@@ -39,8 +40,11 @@ function Snowman({maxWrong, images, words}) {
     updateNWrong(n => n + (answer.includes(ltr) ? 0 : 1));
   }
 
+  const gameIsOver = maxWrong === nWrong ? true : false;
+
   /** generateButtons: return array of letter buttons to render */
   function generateButtons() {
+    if (!gameIsOver) {
     return "abcdefghijklmnopqrstuvwxyz".split("").map(ltr => (
       <button
         key={ltr}
@@ -51,14 +55,24 @@ function Snowman({maxWrong, images, words}) {
         {ltr}
       </button>
     ));
+    } else {
+      return (
+        <h1 className="loser-msg">
+          You lose! The answer was <b>{answer}</b>.
+        </h1>
+      )
+    }
   }
 
   /** render: render game */
   return (
     <div className="Snowman">
+      <div className="number-wrong">
+        <b>Number wrong:</b> {nWrong}
+      </div>
       <img src={images[nWrong]}/>
       <p className="Snowman-word">{guessedWord()}</p>
-      <p>{generateButtons()}</p>
+      <div>{generateButtons()}</div>
     </div>
   );
 }
@@ -66,7 +80,7 @@ function Snowman({maxWrong, images, words}) {
 Snowman.defaultProps = {
   maxWrong: 6,
   images: [img0, img1, img2, img3, img4, img5, img6],
-  words: ["apple"]
+  words: [randomWord(ENGLISH_WORDS)]
 };
 
 export default Snowman;
